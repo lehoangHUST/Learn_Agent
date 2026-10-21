@@ -18,7 +18,7 @@ if not groq_api_key:
         "[LỖI THIẾU KEY] Chưa tìm thấy biến môi trường 'GROQ_API_KEY'. "
         "Vui lòng khai báo trong file .env hoặc export vào terminal."
     )
-
+    
 try:
     # Khởi tạo Chat Model với timeout cụ thể (ví dụ 10s)
     # Lưu ý: Thay tên model hợp lệ trên Groq như 'llama-3.1-8b-instant' hoặc 'llama-3.3-70b-versatile'
