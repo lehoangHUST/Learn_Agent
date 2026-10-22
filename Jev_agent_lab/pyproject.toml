@@ -1,0 +1,15 @@
+[project]
+name = "jev-agent-lab"
+version = "0.1.0"
+description = "Mini lab: using TypeSafe Jev as a decision component inside Python AI agents"
+requires-python = ">=3.11"
+dependencies = [
+    "typesafe-sdk>=0.7,<0.8",   # verified against 0.7.5 (2026-10-21)
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

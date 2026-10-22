@@ -1,0 +1,20 @@
+{"id": "t01", "subject": "Double charge", "body": "I was charged twice for my subscription. Please refund.", "topic": "billing", "security": 0}
+{"id": "t02", "subject": "Invoice", "body": "Can you resend the invoice for March? I need it for accounting.", "topic": "billing", "security": 0}
+{"id": "t03", "subject": "Card declined", "body": "My payment keeps failing at checkout even though the card works elsewhere.", "topic": "billing", "security": 0}
+{"id": "t04", "subject": "500 errors", "body": "The API returns 500 errors on every request since this morning.", "topic": "technical", "security": 0}
+{"id": "t05", "subject": "App crash", "body": "The mobile app crashes when I open the settings page.", "topic": "technical", "security": 0}
+{"id": "t06", "subject": "Webhook", "body": "Webhooks stopped arriving at our endpoint after your update yesterday.", "topic": "technical", "security": 0}
+{"id": "t07", "subject": "Locked out", "body": "I forgot my password and the reset email never arrives.", "topic": "account_access", "security": 0}
+{"id": "t08", "subject": "2FA", "body": "I lost my phone and cannot pass 2FA to log in.", "topic": "account_access", "security": 0}
+{"id": "t09", "subject": "Suspicious login", "body": "Someone logged in from another country and changed my email. I did not do this.", "topic": "security", "security": 1}
+{"id": "t10", "subject": "Phishing", "body": "I got an email pretending to be you asking for my password, and I clicked it.", "topic": "security", "security": 1}
+{"id": "t11", "subject": "Unknown charges", "body": "There are purchases on my account I never made, I think I was hacked.", "topic": "security", "security": 1}
+{"id": "t12", "subject": "Delete data", "body": "Under GDPR, please delete all my personal data.", "topic": "legal_privacy", "security": 0}
+{"id": "t13", "subject": "Lawyer", "body": "If this is not fixed by Friday my lawyer will contact you.", "topic": "legal_privacy", "security": 0}
+{"id": "t14", "subject": "Idea", "body": "Would love a dark mode, great product otherwise!", "topic": "feedback", "security": 0}
+{"id": "t15", "subject": "Feature", "body": "Please add export to CSV for reports.", "topic": "feedback", "security": 0}
+{"id": "t16", "subject": "Bị trừ tiền", "body": "Tôi bị trừ tiền hai lần, vui lòng hoàn tiền.", "topic": "billing", "security": 0}
+{"id": "t17", "subject": "Lỗi đăng nhập", "body": "Tôi không đăng nhập được, quên mật khẩu.", "topic": "account_access", "security": 0}
+{"id": "t18", "subject": "Tài khoản bị hack", "body": "Tài khoản của tôi bị hack, có người đổi email.", "topic": "security", "security": 1}
+{"id": "t19", "subject": "Hello", "body": "Hi there, just saying hello.", "topic": "other", "security": 0}
+{"id": "t20", "subject": "Mixed", "body": "I was charged twice and now the app also shows an error when I open billing.", "topic": "billing", "security": 0}
