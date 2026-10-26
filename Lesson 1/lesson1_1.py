@@ -4,10 +4,18 @@ import httpx
 import groq
 from langchain.chat_models import init_chat_model
 from langchain_core.messages import SystemMessage, HumanMessage
+from langchain_core.runnables import RunnableConfig
 
 # Khắc phục lỗi cert đường dẫn ảo nếu có
 os.environ.pop("SSL_CERT_FILE", None)
 load_dotenv()
+
+config = RunnableConfig(
+    run_name="Explain_Topic_Pipeline",
+    tags=["demo-pipeline", "lesson-lcel"],
+    metadata={"user_id": "user_123", "environment": "production"},
+    # callbacks=[...] # Gắn handler như Langfuse vào đây, mọi bước con đều nhận được
+)
 
 # ==========================================
 # 1. KIỂM TRA LỖI THIẾU API KEY
@@ -22,12 +30,7 @@ if not groq_api_key:
 try:
     # Khởi tạo Chat Model với timeout cụ thể (ví dụ 10s)
     # Lưu ý: Thay tên model hợp lệ trên Groq như 'llama-3.1-8b-instant' hoặc 'llama-3.3-70b-versatile'
-    chat = init_chat_model(
-        "llama-3.1-8b-instant",
-        model_provider="groq",
-        groq_api_key=groq_api_key,
-        timeout=10.0,
-    )
+    chat = init_chat_model("groq:allam-2-7b")
 
     messages = [
         SystemMessage(content="You are a helpful assistant."),
