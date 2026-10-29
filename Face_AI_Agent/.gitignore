@@ -1,0 +1,23 @@
+.env
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Dữ liệu runtime - KHÔNG commit. Chứa embedding (dữ liệu sinh trắc học),
+# ảnh đã lưu, kết quả search và checkpoint hội thoại.
+data/
+*.db
+*.db-wal
+*.db-shm
+*.faiss
+*.meta.json
+
+# Dataset dùng để đăng ký/hiệu chuẩn - không commit ảnh người vào git.
+dataset/
+validation_set/

@@ -1,0 +1,19 @@
+# Phiên bản đã chạy và test trên Python 3.12.
+
+# --- Runtime của vòng lặp agent ---
+langgraph==1.0.1
+langgraph-checkpoint-sqlite==3.0.3
+langchain-core==0.3.86
+
+# --- API ---
+fastapi==0.141.1
+uvicorn[standard]==0.53.0
+pydantic==2.13.5
+
+# --- LLM (TUỲ CHỌN) ---
+# Chỉ cần khi chạy với model thật. Mọi kịch bản `--demo` chạy được mà không có gói
+# này: ScriptedModelClient chỉ dùng langchain-core.
+langchain-openai==0.3.35
+
+# Không có dependency nào cho tầng dữ liệu: toolset SQL dùng `sqlite3` của stdlib,
+# và read-only mode cùng progress-handler timeout đều là tính năng sẵn có của nó.

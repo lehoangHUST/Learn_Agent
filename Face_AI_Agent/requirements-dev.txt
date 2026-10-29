@@ -1,0 +1,8 @@
+-r requirements.txt
+
+pytest==8.1.1
+pytest-cov>=5.0
+# TestClient của Starlette cần httpx - đã có trong requirements.txt.
+
+# Lint/format (tuỳ chọn, cấu hình trong pyproject.toml)
+ruff>=0.6

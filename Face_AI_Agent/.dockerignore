@@ -1,0 +1,30 @@
+# Giữ build context nhỏ, và quan trọng hơn: không để dữ liệu sinh trắc học hay
+# secret lọt vào image.
+.git
+.gitignore
+.env
+.venv
+venv
+__pycache__
+**/__pycache__
+*.pyc
+*.pyo
+.pytest_cache
+.ruff_cache
+htmlcov
+.coverage
+
+# Dữ liệu runtime: index FAISS, ảnh đã lưu, result store, checkpoint.
+# Những thứ này được mount bằng volume, KHÔNG bake vào image.
+data/
+*.db
+*.db-wal
+*.db-shm
+*.faiss
+*.meta.json
+
+# Tài liệu và test không cần trong image chạy.
+tests/
+README.md
+*.md
+dataset/

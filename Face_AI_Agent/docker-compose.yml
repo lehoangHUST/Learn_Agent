@@ -1,0 +1,70 @@
+# Chạy CPU - đây là cấu hình mặc định và nó KHÔNG cần NVIDIA GPU.
+#
+# Service này không chạy model: detection + embedding do backend imintv3 đảm nhiệm
+# qua HTTP. Phần nặng duy nhất ở đây là FAISS, và IndexFlatIP trên CPU đủ nhanh tới
+# cỡ 10^6 vector. Cấu hình GPU nằm ở docker-compose.gpu.yml và chỉ cần khi bạn đưa
+# model vào trong service.
+#
+#   docker compose up --build
+#   docker compose exec api python scripts/make_synthetic_index.py --subjects 20
+#   curl http://localhost:8000/api/v1/health
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: face-ai-agent:latest
+    container_name: face-ai-agent
+    ports:
+      - "8000:8000"
+    environment:
+      # Backend face. Trong container, "localhost" là chính container này, nên
+      # phải dùng IP/hostname mà container gọi tới được.
+      FACE_AI_VISION_BASE_URL: "${FACE_AI_VISION_BASE_URL:-http://10.9.3.239:3124}"
+      FACE_AI_VISION_BACKEND: "${FACE_AI_VISION_BACKEND:-imint_v3}"
+      FACE_AI_VISION_TIMEOUT: "30"
+
+      FACE_AI_ENVIRONMENT: "${FACE_AI_ENVIRONMENT:-dev}"
+      FACE_AI_LOG_LEVEL: "${FACE_AI_LOG_LEVEL:-INFO}"
+      FACE_AI_JSON_LOGS: "true"
+
+      # Xác thực. Để trống + environment=dev -> truy cập ẩn danh (chỉ cho dev).
+      # Cú pháp: <token>|<user>|<role,role>|<collection,collection>
+      FACE_AI_TOKENS: "${FACE_AI_TOKENS:-}"
+
+      # Ngưỡng: mặc định CHƯA hiệu chuẩn. Xem scripts/calibrate_threshold.py.
+      FACE_AI_MATCH_THRESHOLD: "${FACE_AI_MATCH_THRESHOLD:-0.55}"
+      FACE_AI_MATCHING_CALIBRATED: "${FACE_AI_MATCHING_CALIBRATED:-false}"
+
+      # LLM tuỳ chọn. false -> trả lời bằng template tất định, số liệu không đổi.
+      FACE_AI_LLM_ENABLED: "${FACE_AI_LLM_ENABLED:-false}"
+      OPENAI_API_KEY: "${OPENAI_API_KEY:-}"
+
+      # Tracing tuỳ chọn - mỗi node LangGraph thành một span.
+      FACE_AI_LANGFUSE_ENABLED: "${FACE_AI_LANGFUSE_ENABLED:-false}"
+      LANGFUSE_PUBLIC_KEY: "${LANGFUSE_PUBLIC_KEY:-}"
+      LANGFUSE_SECRET_KEY: "${LANGFUSE_SECRET_KEY:-}"
+      LANGFUSE_HOST: "${LANGFUSE_HOST:-}"
+
+    volumes:
+      # Dữ liệu runtime phải sống ngoài container: index FAISS, result store (SQLite)
+      # và checkpoint hội thoại. Không mount -> mất hết mỗi lần restart.
+      - face-ai-data:/app/data
+      # Sửa ngưỡng mà không build lại image.
+      - ./configs:/app/configs:ro
+
+    restart: unless-stopped
+
+    # Chống container lỗi làm nghẽn host. Điều chỉnh theo tải thật.
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 2G
+
+volumes:
+  face-ai-data:
+    # Volume này chứa EMBEDDING - dữ liệu sinh trắc học. Áp dụng cùng chính sách
+    # bảo vệ, sao lưu và xoá như với cơ sở dữ liệu nhân sự.
+    driver: local

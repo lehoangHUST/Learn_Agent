@@ -1,0 +1,29 @@
+# Overlay GPU - CHỈ cần khi bạn đưa model vào chạy trong service này.
+#
+# Ở cấu hình mặc định, service KHÔNG dùng GPU: detection và embedding do backend
+# imintv3 đảm nhiệm (GPU nằm ở phía đó), còn ở đây chỉ có FAISS trên CPU. Đừng bật
+# file này nếu không có nhu cầu thật - nó yêu cầu NVIDIA Container Toolkit trên host.
+#
+# Dùng:
+#   docker compose -f docker-compose.yml -f docker-compose.gpu.yml up --build
+#
+# Trước đó cần:
+#   1. Driver NVIDIA + NVIDIA Container Toolkit trên host.
+#   2. Đổi Dockerfile sang base image CUDA (xem phần cuối Dockerfile).
+#   3. Thay faiss-cpu bằng faiss-gpu trong requirements.txt.
+#
+# Kiểm tra host có sẵn sàng:
+#   docker run --rm --gpus all nvidia/cuda:12.4.1-base-ubuntu22.04 nvidia-smi
+
+services:
+  api:
+    environment:
+      NVIDIA_VISIBLE_DEVICES: "all"
+      NVIDIA_DRIVER_CAPABILITIES: "compute,utility"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]

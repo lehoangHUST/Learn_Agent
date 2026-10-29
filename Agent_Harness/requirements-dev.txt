@@ -1,0 +1,6 @@
+-r requirements.txt
+
+pytest==8.1.1
+pytest-cov>=5.0
+httpx==0.28.1   # TestClient của Starlette cần
+ruff>=0.6

@@ -1,0 +1,38 @@
+# Phiên bản đã thực sự chạy và test trên Python 3.12.
+# Pin chặt để môi trường dựng lại được; nâng cấp thì chạy lại toàn bộ test suite
+# (đặc biệt là tests/test_state_reducers.py - nó phụ thuộc hành vi reducer và
+# InvalidUpdateError của LangGraph).
+
+# --- Điều phối workflow ---
+langgraph==1.0.1
+langgraph-checkpoint-sqlite==3.0.3
+langchain-core==0.3.86
+
+# --- API ---
+fastapi==0.141.1
+uvicorn[standard]==0.53.0
+pydantic==2.13.5
+PyYAML==6.0.2
+python-dotenv==1.0.0
+
+# --- Vector search ---
+# IndexFlatIP cho cosine chính xác tuyệt đối (exhaustive, không xấp xỉ).
+# Đổi sang faiss-gpu nếu có GPU và index lớn; API Python giống nhau.
+faiss-cpu==1.11.0
+numpy==1.26.4
+
+# --- Vision client + xử lý ảnh ---
+# httpx: gọi backend imintv3. Pillow: validate ảnh (magic bytes, kích thước,
+# decompression bomb) - KHÔNG dùng để chạy model nào.
+httpx==0.28.1
+pillow==12.3.0
+
+# --- LLM (TUỲ CHỌN) ---
+# Chỉ cần khi llm.enabled=true. Tắt LLM thì hệ thống vẫn chạy đủ chức năng và trả
+# lời bằng template tất định - xem app/agent/nodes/answer.py.
+langchain-openai==0.3.35
+
+# --- Tracing (TUỲ CHỌN) ---
+# Bỏ comment nếu bật observability.langfuse_enabled. Thiếu gói này thì tracing tự
+# tắt, không làm sập gì.
+# langfuse>=3.0,<4.0

@@ -1,0 +1,35 @@
+[project]
+name = "face-ai-agent"
+version = "0.1.0"
+description = "Face detection + face search (1:N) + Q&A, điều phối bằng LangGraph"
+requires-python = ">=3.11"
+
+# Dependency thật nằm ở requirements.txt (pin chặt, có ghi chú vì sao cần từng gói).
+# File này chỉ cấu hình công cụ.
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --strict-markers"
+filterwarnings = [
+    # LangGraph 1.0.1 phát cảnh báo này khi import; không phải vấn đề của project.
+    "ignore:The default value of `allowed_objects`:Warning",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+ignore = [
+    # Docstring trong project này dài và có chủ ý: chúng ghi lại *vì sao* của từng
+    # quyết định, gồm cả những hành vi đã đo được của backend. Không cắt theo độ dài.
+    "E501",
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Test được phép dùng assert và import trong thân hàm (để fixture gọn).
+"tests/*" = ["B011", "E402"]
+# Script chèn sys.path TRƯỚC khi import app, nên không được sắp lại import
+# (I001 sẽ đẩy import app lên trên dòng sys.path và script hết chạy được).
+"scripts/*" = ["E402", "I001"]

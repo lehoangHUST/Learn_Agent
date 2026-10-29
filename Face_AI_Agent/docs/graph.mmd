@@ -1,0 +1,59 @@
+---
+config:
+  flowchart:
+    curve: linear
+---
+graph TD;
+	__start__([<p>__start__</p>]):::first
+	begin_run(begin_run)
+	validate_input(validate_input)
+	classify_intent(classify_intent)
+	plan_execution(plan_execution)
+	detect_faces(detect_faces)
+	generate_embeddings(generate_embeddings)
+	search_faces(search_faces)
+	analyze_results(analyze_results)
+	answer_question(answer_question)
+	handle_error(handle_error)
+	finalize_response(finalize_response)
+	__end__([<p>__end__</p>]):::last
+	__start__ --> begin_run;
+	analyze_results -.-> answer_question;
+	analyze_results -.-> finalize_response;
+	analyze_results -.-> handle_error;
+	answer_question -.-> finalize_response;
+	begin_run --> validate_input;
+	classify_intent -.-> handle_error;
+	classify_intent -.-> plan_execution;
+	detect_faces -.-> analyze_results;
+	detect_faces -.-> answer_question;
+	detect_faces -.-> finalize_response;
+	detect_faces -.-> generate_embeddings;
+	detect_faces -.-> handle_error;
+	detect_faces -.-> search_faces;
+	generate_embeddings -.-> analyze_results;
+	generate_embeddings -.-> answer_question;
+	generate_embeddings -.-> finalize_response;
+	generate_embeddings -.-> handle_error;
+	generate_embeddings -.-> search_faces;
+	handle_error -.-> answer_question;
+	handle_error -.-> detect_faces;
+	handle_error -.-> finalize_response;
+	handle_error -.-> generate_embeddings;
+	handle_error -.-> search_faces;
+	plan_execution -.-> analyze_results;
+	plan_execution -.-> answer_question;
+	plan_execution -.-> detect_faces;
+	plan_execution -.-> finalize_response;
+	plan_execution -.-> generate_embeddings;
+	plan_execution -.-> handle_error;
+	search_faces -.-> analyze_results;
+	search_faces -.-> answer_question;
+	search_faces -.-> finalize_response;
+	search_faces -.-> handle_error;
+	validate_input -.-> classify_intent;
+	validate_input -.-> handle_error;
+	finalize_response --> __end__;
+	classDef default fill:#f2f0ff,line-height:1.2
+	classDef first fill-opacity:0
+	classDef last fill:#bfb6fc

@@ -1,0 +1,94 @@
+# Face AI Agent - cấu hình mặc định.
+#
+# File này KHÔNG chứa secret. API key chỉ đọc từ biến môi trường (xem .env.example).
+# Mọi giá trị dưới đây có thể override bằng env - xem _ENV_MAP trong app/config.py.
+
+app_name: face-ai-agent
+environment: dev
+
+vision:
+  # imint_v3 = backend thật tại base_url; fake = engine xác định dùng cho test/offline.
+  backend: imint_v3
+  base_url: http://10.9.3.239:3124
+  extract_feature_path: /imintv3/extract_feature/
+  timeout_seconds: 30.0
+  connect_timeout_seconds: 5.0
+  max_retries: 2
+  retry_backoff_seconds: 0.5
+
+  detect_face: 1
+  is_checkresize: true
+
+  # 'aligned' -> result.features (khuyến nghị). 'unaligned' -> result.features_unalign.
+  # Hai không gian này KHÔNG tương thích nhau (đo được cos ~ 0.04 trên cùng khuôn mặt).
+  # Đổi giá trị -> phải build lại index từ đầu.
+  embedding_space: aligned
+  embedding_dim: 512
+  enforce_l2_normalize: true
+  min_face_size_px: 32
+
+matching:
+  metric: cosine
+  # ======================= CHƯA HIỆU CHUẨN =======================
+  # 0.55 là giá trị placeholder để demo chạy được, KHÔNG phải ngưỡng vận hành.
+  # Chạy: python scripts/calibrate_threshold.py --pairs <file> rồi thay số ở đây
+  # và đặt calibrated: true. Trước khi làm điều đó, mọi kết luận "match" của hệ
+  # thống chỉ nên coi là gợi ý cần người xem lại.
+  # ===============================================================
+  match_threshold: 0.55
+  review_band: 0.05
+  ambiguous_margin: 0.03
+  top_k: 5
+  calibrated: false
+  calibration_note: "UNCALIBRATED placeholder. See scripts/calibrate_threshold.py"
+
+vector_store:
+  backend: faiss
+  index_dir: data/index
+  collection: default
+
+storage:
+  backend: local
+  image_dir: data/images
+  # Ảnh truy vấn mặc định KHÔNG lưu. Chỉ bật khi có cơ sở pháp lý và chính sách lưu trữ.
+  persist_query_images: false
+  image_ttl_seconds: 3600
+  results_db_path: data/results/results.db
+  result_ttl_seconds: 86400
+
+llm:
+  # false -> toàn bộ hệ thống chạy bằng logic xác định (rule-based intent + template
+  # answer). Con số vẫn đúng tuyệt đối; chỉ câu trả lời là bớt tự nhiên.
+  enabled: false
+  provider: openai
+  model: gpt-4o-mini
+  temperature: 0.0
+  max_tokens: 800
+  timeout_seconds: 30.0
+  use_for_intent: true
+  use_for_answer: true
+
+limits:
+  max_image_bytes: 8388608       # 8 MiB
+  max_images_per_request: 8
+  max_image_pixels: 50000000     # chống decompression bomb
+  min_image_side_px: 32
+  allowed_mime_types:
+    - image/jpeg
+    - image/png
+    - image/webp
+    - image/bmp
+  rate_limit_per_minute: 60
+  node_timeout_seconds: 60.0
+
+graph:
+  # sqlite dùng cho demo/1 instance. Nhiều instance -> đổi sang Postgres saver.
+  checkpointer: sqlite
+  checkpoint_db_path: data/results/checkpoints.db
+  recursion_limit: 30
+  max_node_retries: 2
+
+observability:
+  log_level: INFO
+  json_logs: true
+  langfuse_enabled: false
